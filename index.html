@@ -283,39 +283,25 @@ let answers=[],idx=0;
 function render(){document.getElementById('question').textContent=questions[idx][0];document.getElementById('step').textContent=`QUESTION ${String(idx+1).padStart(2,'0')} / ${questions.length}`;document.getElementById('pct').textContent=Math.round((idx+1)/questions.length*100)+'%';document.getElementById('bar').style.width=((idx+1)/questions.length*100)+'%';document.getElementById('answers').innerHTML=questions[idx][1].map((a,i)=>`<button class="answer" onclick="choose(${i})"><span style="color:#ff6875;font:700 12px Rajdhani">OPTION 0${i+1}</span><br>${a}</button>`).join('')}
 function choose(n){answers.push(n);if(idx<questions.length-1){idx++;render()}else showResult()}
 
-const agentImages = {
-  "Astra": "https://wiki.playvalorant.com/en-us/images/Astra_artwork.png",
-  "Breach": "https://wiki.playvalorant.com/en-us/images/Breach_artwork.png",
-  "Brimstone": "https://wiki.playvalorant.com/en-us/images/Brimstone_artwork.png",
-  "Chamber": "https://wiki.playvalorant.com/en-us/images/Chamber_artwork.png",
-  "Clove": "https://wiki.playvalorant.com/en-us/images/Clove_artwork.png",
-  "Cypher": "https://wiki.playvalorant.com/en-us/images/Cypher_artwork.png",
-  "Deadlock": "https://wiki.playvalorant.com/en-us/images/Deadlock_artwork.png",
-  "Fade": "https://wiki.playvalorant.com/en-us/images/Fade_artwork.png",
-  "Gekko": "https://wiki.playvalorant.com/en-us/images/Gekko_artwork.png",
-  "Harbor": "https://wiki.playvalorant.com/en-us/images/Harbor_artwork.png",
-  "Hush": "https://wiki.playvalorant.com/en-us/images/thumb/Hush_Artwork_Full.png/1024px-Hush_Artwork_Full.png?d0c4a",
-  "Iso": "https://wiki.playvalorant.com/en-us/images/Iso_artwork.png",
-  "Jett": "https://wiki.playvalorant.com/en-us/images/Jett_artwork.png",
-  "KAY/O": "https://wiki.playvalorant.com/en-us/images/KAYO_artwork.png",
-  "Killjoy": "https://wiki.playvalorant.com/en-us/images/Killjoy_artwork.png",
-  "Miks": "https://wiki.playvalorant.com/en-us/images/thumb/Miks_Artwork_Full.png/1024px-Miks_Artwork_Full.png?166d4",
-  "Neon": "https://wiki.playvalorant.com/en-us/images/Neon_artwork.png",
-  "Omen": "https://wiki.playvalorant.com/en-us/images/Omen_artwork.png",
-  "Phoenix": "https://wiki.playvalorant.com/en-us/images/Phoenix_artwork.png",
-  "Raze": "https://wiki.playvalorant.com/en-us/images/Raze_artwork.png",
-  "Reyna": "https://wiki.playvalorant.com/en-us/images/Reyna_artwork.png",
-  "Sage": "https://wiki.playvalorant.com/en-us/images/Sage_artwork.png",
-  "Skye": "https://wiki.playvalorant.com/en-us/images/Skye_artwork.png",
-  "Sova": "https://wiki.playvalorant.com/en-us/images/Sova_artwork.png",
-  "Tejo": "https://wiki.playvalorant.com/en-us/images/thumb/Tejo_Artwork_Full.png/1024px-Tejo_Artwork_Full.png?7cdef",
-  "Veto": "https://static.wikia.nocookie.net/valorant/images/0/04/Veto_Artwork_Full.png/revision/latest?cb=20251007182704",
-  "Viper": "https://wiki.playvalorant.com/en-us/images/Viper_artwork.png",
-  "Vyse": "https://wiki.playvalorant.com/en-us/images/Vyse_artwork.png",
-  "Waylay": "https://wiki.playvalorant.com/en-us/images/thumb/Waylay_Artwork_Full.png/1024px-Waylay_Artwork_Full.png?aba90",
-  "Yoru": "https://wiki.playvalorant.com/en-us/images/Yoru_artwork.png"
-};
+let agentImages = {};
 
+async function loadAgentImages() {
+  try {
+    const response = await fetch(
+      "https://valorant-api.com/v1/agents?isPlayableCharacter=true"
+    );
+
+    const data = await response.json();
+
+    data.data.forEach(agent => {
+      agentImages[agent.displayName] =
+        agent.fullPortrait || agent.displayIcon;
+    });
+
+  } catch (error) {
+    console.error("Cannot load agent images:", error);
+  }
+}
 function showResult() {
   let score = [0, 0, 0, 0];
 answers.forEach(a => score[a]++);
