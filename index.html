@@ -374,5 +374,12 @@ Take the quiz!`;
 function restart(){answers=[];idx=0;document.getElementById('result').classList.add('hidden');document.getElementById('quiz').classList.remove('hidden');render()}
 function share(){if(navigator.share)navigator.share({title:"My VALO DNA",text:window.resultText});else if(navigator.clipboard){navigator.clipboard.writeText(window.resultText).then(()=>alert("คัดลอกผลลัพธ์แล้ว! เอาไปแชร์ได้เลย"))}else alert(window.resultText)}
 const roster=["Astra","Breach","Brimstone","Chamber","Clove","Cypher","Deadlock","Fade","Gekko","Harbor","Hush","Iso","Jett","KAY/O","Killjoy","Miks","Neon","Omen","Phoenix","Raze","Reyna","Sage","Skye","Sova","Tejo","Veto","Viper","Vyse","Waylay","Yoru"];
-document.getElementById('roster').innerHTML=roster.map(a=>`<span class="agent">${a}</span>`).join('');render();
+document.getElementById('roster').innerHTML =
+  roster.map(a => `<span class="agent">${a}</span>`).join('');
+
+loadAgentImages().then(() => {
+  console.log("Agent images loaded!");
+});
+
+render();
 </script></body></html>
