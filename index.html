@@ -296,6 +296,7 @@ async function loadAgentImages() {
     data.data.forEach(agent => {
       agentImages[agent.displayName] =
         agent.fullPortrait || agent.displayIcon;
+      console.log(agent.displayName, agentImages[agent.displayName]);
     });
 
   } catch (error) {
